@@ -400,7 +400,7 @@ ppt 要求：
 
 * 请选择一个合适的产品，对业务范围做简单描述后：
     - 服务编排：画出后台主要的微服务，用圆圈表示（不同颜色表示开发语言）；服务间调用依赖用带箭头虚线表示，用构造型表示协议，如\<\<gRPC\>\>；服务间通过消息队列传递传递消息，请在带箭头虚线上给出消息名称；数据库用方块表示；服务需要访问数据库用带箭头实线表示
-    - 例如：[https://www.tuicool.com/articles/ue6nAf6](https://www.tuicool.com/articles/ue6nAf6)
+    - 例如：[Google Open-Sources 10-tier demo microservice application](https://www.tuicool.com/articles/ue6nAf6)
     - 给出你选择的开发语言（如java）微服务开发的框架、标准与规范
     - java Restlet（JaxRS） 等
 * 分别介绍Rest、gRPC 和 GraphQL 服务接口技术
@@ -519,11 +519,11 @@ ppt 必须满足的要求：
         - 保证第三方应用调用是合法的第三方
     - 基于token的特别资源访问
 
-### 16、性能优化（缓存、消息服务、数据管理）支持
+## 16、性能优化（缓存、消息服务、数据管理）支持
 
-### 17、监控、日志与可伸缩服务
+## 17、监控、日志与可伸缩服务
 
-### 18、开发流水线与 DevOps 工具集
+## 18、开发流水线与 DevOps 工具集
 
 
 
