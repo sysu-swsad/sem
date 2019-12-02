@@ -506,7 +506,7 @@ ppt 必须满足的要求：
     - 需要描述 API 网关的主要特征与功能
     - 可以推荐用户使用云供应商 API 产品
     - API 网关一定要结合服务注册与服务发现服务
-    - 最好结合具体平台配置。如给出 ingress 的配置描述 
+    - 最好结合具体平台配置。如给出 [ingress](https://v1-12.docs.kubernetes.io/zh/docs/concepts/services-networking/ingress/) 的配置描述 
 * 服务安全设计
     - HTTP 协议传输安全，讲述 https 对微服务的重要性
     - 描述用户认证与授权安全管理的方案
