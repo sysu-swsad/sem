@@ -637,6 +637,7 @@ ppt 要求：
 * 假定不使用 service mesh 技术，请给出某种语言 rest/http 服务监控中间件与配置的设计，时序数据库采用 Prometheus
     - Java 就是 Filter 和 Listener
     - Golang 就是 negroni 中间件
+    - 建议在 docker 环境下搭建 cAdvisor + Prometheus + Grafana 技术结构测试中间件；Kubernetes 平台下使用 Prometheus + Grafana。
 
 ## 18、微服务（Orchestration）架构 - 开发流水线与 DevOps 工具集
 
