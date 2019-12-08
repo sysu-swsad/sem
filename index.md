@@ -405,7 +405,7 @@ ppt 要求：
     - java Restlet（JaxRS） 等
 * 分别介绍Rest、gRPC 和 GraphQL 服务接口技术
 
-## 15、微服务（Orchestration）架构 - 网关与应用安全架构设计
+## 15、微服务（Orchestration）架构 - 网关（服务发现）与应用安全架构设计
 
 场景：在 Y 团队介绍了服务设计后，X 总有一种“新瓶装陈酒”的感觉。这不是**逻辑架构设计**的另一种表达吗？最早用包图表示类的层次化组织，后来用组件（在 Java 应用中就是一个 Jar 包）图表示系统的结构，现在将这些组件按业务能力将这些组件组织成若干小项目，项目之间用 REST，gRPC 包装一番再调用，就成了服务编排（Choreography）。是该讨论**物理架构设计**实现了 ... ... 
 
@@ -419,7 +419,7 @@ ppt 要求：
 
 > 服务编制：协调管理多个服务的动态调度过程，以满足服务编排描述文件的要求。如 Kubernetes, Mesos, Docker Swarm，Amazon ECS 等平台。如果是虚拟机平台，Spring cloud 自带服务编制需要的组件
 
-> 云原生技术栈与工具：见 [landscape](https://landscape.cncf.io/images/landscape.png)。服务架构与技术所有术语请尽可能保持 [CNCF](https://www.cncf.io/) 描述一致
+> 云原生技术栈与工具：见 [CNCF landscape](https://landscape.cncf.io/)。服务架构与技术所有术语请尽可能保持 [CNCF](https://www.cncf.io/) 描述一致
 
 X：在华为云上部署微服务是否一定需要使用 Spring Cloud 呢？华为号称秒级启动微服务！
 
@@ -523,6 +523,7 @@ Tips：
 
 * [基于 STS 和 JWT 的微服务身份认证](https://www.infoq.cn/article/micro-service-authorization-sts-jwt) ，该文比较通俗易懂；
 * [百亿流量微服务网关的设计与实现](https://www.infoq.cn/article/EeE1xZeic4UdpbmR*03t) ，可作为参考。API 网关需参考阿里、华为等的资料，以及 CNCF 产品地图。
+* [K8s 工程师必懂的 10 种 Ingress 控制器](https://www.kubernetes.org.cn/5948.html)
 
 ## 16、微服务（Orchestration）架构 - 运用缓存、消息服务提升服务能力
 
@@ -596,9 +597,48 @@ ppt 要求：
     - 结合 CNCF 技术栈框架，介绍分布式数据、分布式消息产品
     - 由于内容太多，请根据团队的知识结构与兴趣，选择1-2个方面重点介绍
 
-## 17、监控、日志（审计）与 SLA 管理
+## 17、微服务（Orchestration）架构 - 监控、日志（审计）与 SLA 管理
 
-## 18、开发流水线与 DevOps 工具集
+场景：X 认为从云应用程序结构分解（架构）的角度去审视项目有利于避开各种供应商提供的技术细节。但近来总有供应商提供监控、日志管理产品，X 从内心觉得 Java 多层架构中这些问题都不是问题，决定与 Y 聊聊。
+
+**监控、日志**
+
+X：云应用必须采购 [ELK](https://www.elastic.co/cn/what-is/elk-stack) 这样的日志服务吗？ Java 本身日志很好啊！
+
+Y：CNCF 云原生路线图（[Trail Map](https://github.com/cncf/landscape)）中监控和分析是云化应用的第四步。在 [LandScape](https://github.com/cncf/landscape) 中数据监控与分析覆盖 runtime 以上三层，占一个独立部分。细分为监控、日志、追踪三大类产品。从 Java 日志技术发展来看，也是随着应用程序大量使用第三方模块后才逐步统一为 slf4j 这个门面。云应用从一开始就涉及多个服务实例，尤其是它们分布在不同机器上，采用不同语言开发。对于 Java 单体应用，一个模块发生问题，一个节点整个应用就挂了；一个进程或服务挂了、或者发生错误，故障可能会在局部传播，但业务系统依然在运行。对单体应用，监控到节点（主机）就够了，日志仅需分析该主机的日志。而微服务应用，必须监控到服务及其实例，并自动完成熔断操作。而服务的异常可能与所在主机的网络、存储...CPU资源等软硬件环境异常、也可能是自身bug、甚至可能是调用第三方服务等照成。由于服务日志分散在不同容器中，必须及时收集（服务挂了后，容器资源就回收了）。因此，我们需要一个高性能、分布式日志系统，高效完成采集、传输、存储、分析、呈现等服务，ELK 就是其中的一个开源软件常见组合。鉴于云生态的特殊性，日志、监控等一开始就受到高度关注，社区几乎和 
+
+X：开源不等于免费。你玩得转才免费，没这个能力就得出些服务费用，反正总比 IOE（Ibm Oracle EMC）产品便宜。监控也得购买吗？
+
+Y：基础监控工作，包括节点、服务、服务实例的健康状态，资源占用，甚至服务之间的流量分析，云供应商都会提供的。作为甲方团队，熟悉一种监控方案是必须的，例如： [cAdvisor](https://github.com/google/cadvisor) + [Prometheus](https://prometheus.io/docs/introduction/overview/) + [Grafana](https://grafana.com/)。Prometheus 的核心是时序数据库，支持 PromQL 查询。Prometheus 与 Kebernetes API 紧密集成并自动发现节点，直接收集节点与服务信息（从每个节点上 cAdvisor 服务采集）。应用程序也可直接 push 度量给 Prometheus，如 istio 等。Grafana 几乎是通用的呈现端，支持 Prometheus、Influxdb、Elasticsearch 等后端时序服务器。
+
+X：Elasticsearch 和 Prometheus 都是时序数据库，似乎 ELK 与 PAG 组合对应啊，它们功能似乎类似。
+
+Y: 监控关注实时性能，不需要特别精准，一般使用 UTP 作为传播协议；日志通常关注 StdErr/Stdout 等文件输出的收集，关注长期收集的大数据的分析；Tracing 关注 Request/Response 链的传播过程记录。 
+
+**系统健康 与 SLA 管理**
+
+Y：SLA（Sevice Level Agreement）管理是云服务重要内容，在云上的每个应用都应该提供 系统健康 与 SLA 监控与统计服务供给运维团队。用户使用 Prometheus 与 Elasticsearch 就可以方便的收集各个应用的数据，然后使用 Grafana 在监控大屏上显示出来。
+
+X：难道我们运维团队需要和你们一起设计系统健康与 SLA 统计吗？
+
+Y：是必要的。我们的应用程序是很优好的，只要在应用部署描述中，设置了 Prometheus 服务地址，重要的数据就会按需要发送到监控的。以 Java 应用为例，我们提供了专门的 Filter 类帮助客户监控特定请求的性能，我们使用的每种语言都有这样的中间件，但使用中间件的缺点就是与应用程序耦合比较紧。如何客户喜欢更灵活的方案，我们建议使用 [代理机制](https://docs.microsoft.com/zh-cn/azure/architecture/patterns/ambassador) 或 [Sidercar 技术](https://docs.microsoft.com/zh-cn/azure/architecture/patterns/sidecar)，灵活的管理性能和流量。流行的说法叫 service mesh 技术。
+
+Servic Mesh 就是容器时代的 Java AOP（面向方面的编程） 技术。说白了，与通过一个代理对象访问业务对象一样，你得通过一个代理服务访问一个业务服务。这时，仅需要管理代理服务，就可以监控性能与管理流量，避免使用中间件对程序的侵入性。Istio 等这方面工作做的不错。
+
+X：我们运维团队有事了。请你们给我们介绍下日志、监控、或基于service mesh的服务治理技术架构和案例如何？
+
+Y：没问题
+
+ppt 要求：
+
+* 介绍下日志、监控、或基于service mesh的服务治理技术架构和应用案例
+    - 不可泛泛而谈，请在日志、监控、基于service mesh的服务治理 中三选一
+    - 资料可在网上收集，核心技术架构请到官网验证一下，以避免使用多年前的技术资料
+* 假定不使用 service mesh 技术，请给出某种语言 rest/http 服务监控中间件与配置的设计
+    - Java 就是 Filter 和 Listener
+    - Golang 就是 negroni 中间件
+
+## 18、微服务（Orchestration）架构 - 开发流水线与 DevOps 工具集
 
 
 
