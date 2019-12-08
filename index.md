@@ -621,7 +621,7 @@ Y：SLA（Sevice Level Agreement）管理是云服务重要内容，在云上的
 
 X：难道我们运维团队需要和你们一起设计系统健康与 SLA 统计吗？
 
-Y：是必要的。我们的应用程序是很优好的，只要在应用部署描述中，设置了 Prometheus 服务地址，重要的数据就会按需要发送到监控的。以 Java 应用为例，我们提供了专门的 Filter 类帮助客户监控特定请求的性能，我们使用的每种语言都有这样的中间件，但使用中间件的缺点就是与应用程序耦合比较紧。如何客户喜欢更灵活的方案，我们建议使用 [代理机制](https://docs.microsoft.com/zh-cn/azure/architecture/patterns/ambassador) 或 [Sidercar 技术](https://docs.microsoft.com/zh-cn/azure/architecture/patterns/sidecar)，灵活的管理性能和流量。流行的说法叫 service mesh 技术。
+Y：是必要的。我们的应用程序是很优好的，只要在应用部署描述中，设置了 Prometheus 服务地址，重要的数据就会按需要发送到监控的。以 Java 应用为例，我们提供了专门的 Filter 类帮助客户监控服务的性能，我们使用的每种语言都有这样的中间件，但使用中间件的缺点就是与应用程序耦合比较紧。如何客户喜欢更灵活的方案，我们建议使用 [代理机制](https://docs.microsoft.com/zh-cn/azure/architecture/patterns/ambassador) 或 [Sidercar 技术](https://docs.microsoft.com/zh-cn/azure/architecture/patterns/sidecar)，灵活的管理性能和流量。流行的说法叫 service mesh 技术。
 
 Servic Mesh 就是容器时代的 Java AOP（面向方面的编程） 技术。说白了，与通过一个代理对象访问业务对象一样，你得通过一个代理服务访问一个业务服务。这时，仅需要管理代理服务，就可以监控性能与管理流量，避免使用中间件对程序的侵入性。Istio 等这方面工作做的不错。
 
@@ -634,7 +634,7 @@ ppt 要求：
 * 介绍下日志、监控、或基于service mesh的服务治理技术架构和应用案例
     - 不可泛泛而谈，请在日志、监控、基于service mesh的服务治理 中三选一
     - 资料可在网上收集，核心技术架构请到官网验证一下，以避免使用多年前的技术资料
-* 假定不使用 service mesh 技术，请给出某种语言 rest/http 服务监控中间件与配置的设计
+* 假定不使用 service mesh 技术，请给出某种语言 rest/http 服务监控中间件与配置的设计，时序数据库采用 Prometheus
     - Java 就是 Filter 和 Listener
     - Golang 就是 negroni 中间件
 
