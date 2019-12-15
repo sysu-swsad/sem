@@ -641,6 +641,75 @@ ppt 要求：
 
 ## 18、微服务（Orchestration）架构 - 开发流水线与 DevOps 工具集
 
+场景：X 现在理解了，从代码开发角度依然使用传统的方法，而云应用关注了企业业务代码的服务化，企业以业务服务能力为中心构建灵活的（服务复用与自由组合、计算资源按需租用）、可伸缩的新一代的 IT 基础设施。现在有个很热的词 DevOps，它是软件开发商的职责呢？还是甲方的职责呢？
+
+![DevOps](images/pipeline.jpeg)
+
+X：云应用开发都谈 DevOps 这个概念，你们需要我们配合吗？
+
+Y：需要啊。我们开发环境都定在你们单位，所以得提供整套 DevOps 工具。由于开发语言和习惯不同，所以 DevOps 工具比较繁杂。好在其中大多数工具云供应商都提供了。
+
+X：DevOps，CI/CD，Pipeline 在云计算中经常提及，但似乎又是同一概念，例如：[给产品经理讲讲，什么是持续交付和 DevOps](https://cloud.tencent.com/developer/article/1151043)
+
+Y: DevOps 起源于构建自动化，如 make 公寓解决了复杂依赖的多个程序的编译、链接问题，Java 对应的是 Ant。在组件的时代，组件的组织、开发、存放、检索、版本依赖问题就非常突出了，自然就有了 Maven。它统一命名程序组件，申明式组件环境与依赖配置，支持组件或应用开发[从代码检查到部署所有步骤](https://www.runoob.com/maven/maven-build-life-cycle.html)，构件了覆盖全球的分布式 Maven 仓库。开发者可以方便的管理、组织组件库，迅速开发程序。go 语言的 go 命令行，Nodejs 的 npm 等都是完成类似的任务。传统的应用开发的结果通常只有一个程序，测试与部署相对简单。而云应用运行涉及多个程序以及它们之间的依赖，每个程序又是自主的开发、升级，云基础设施环境又非常复杂（涉及技术众多、缺乏统一标准），因而普通开发者根本没有能力从零开始一步步完成开发、测试、部署、运维过程。因此，CI/CD 也是这几年初创公司最喜欢的领域之一。
+
+“ DevOps ”一词源自“开发 - Development ”和“运维 - Operations ”的词汇组合，直观的理解即 "Dev ... Ops" 全生命周期服务，或是通过一组工具与脚本实现开发到运维过程的自动化。几乎所有云供应商都有这么一支 DevOps 团队，为大客户提供从上云业务咨询、开发过程支持、...到运维监控全方位的支持。
+
+除去上云业务方案与技术环境支持外，DevOps 通常包括以下技术与工具：
+
+* 源码仓库（Source Repository）。又分为本地仓库，和远程仓库。开发者提交本地版本到远程仓库，也称为 Check-In。典型源码仓库：Github，码云，GitLab 等；
+* 持续集成（Continuous Integration）。即当远程仓库收到 Check In 完成，如果满足一定条件，如项目根有 `.travis.yml` 文件，仓库配置了 web-hook 等，测试服务如 Travis 就会自动启动该项目的单元测试与集成测试，并将结果返回开发者。典型测试工具：在线的 Travis，本地的 Jenkins 等；
+* 持续发布（Continuous Publications）。当测试通过，则会触发镜像仓库（Docker Registry）根据项目中 .dockerflie 自动构建产品镜像；或者由构建程序构建镜像，并发布到镜像仓库。
+* 持续部署（Continuous Deployment）。当新的镜像构建后，可以通过 web kook 通知云应用管理程序自动升级；也可以由 CI/CD 一体化工具用脚本部署、升级云应用。例如：Github CI 
+* 流水线（Pipeline），就是 CI ... CD 全过程或者 DevOps 过程的管理及工具，例如 Gitlab Runner。作为流水线就是要关注 CI、CD 每个环级的输出结果（或者要对结果进行度量），通过数据分析，保障过程的执行效率，促进团队成员技能提升，提升产品质量。 
+
+很多工具可以通过配置脚本一体化完成这个流水线，特别是在 docker 基础上构建。如 Jenkins PipeLine，Drone CI，华为云 [ContainerOps](https://support.huaweicloud.com/usermanual-containerops/ops_01_0003.html)，阿里云 [codePipeLine](https://help.aliyun.com/product/55903.html)
+
+X: 未来云应用供应商越来越多，围绕源码仓库、docker 镜像仓库构建 CI/CD 流水线是我们这个项目要实践的重要内容。源码仓库我们以前都用 svn 体验很好，似乎云应用一来，风就吹到 Git 仓库库。自建、购买国内码云产品估计也很难给明确的理由；镜像仓库也存在自建或购买华为、阿里产品的问题；关键是CI，CD与它们的配合，以及采集哪些指标才能满足甲方监管基本要求等。最近我们很忙，能否介绍你们 DevOps 的实践，特别是帮我们在网上整理 CI/CD pipeline 组合方案？
+
+Y：没问题，反正项目开发也需要构建开发流水线
+
+
+ppt 要求（三选一）：
+
+* 介绍 CI/CD Pipeline 原理、使用工具与案例
+* 通过互联网收集 CI/CD Pipeline 产品，做整理与分析。要求回答
+    - 是否可继续使用 svn 作为源码工具？购买码云服务可以吗？（不考虑国外在线服务）
+    - CI/CD 常用产品工具对比。是否购买华为、阿里产品？还是在内部构建 Jenkins 服务？
+    - Docker 镜像仓库是自建，或购买华为、阿里产品？
+* 如果你曾经实习的企业构建了 CI 流水线，请介绍相关实践。包括但不限于以下内容：
+    - CI/CD 框架结构
+    - 度量指标，特别是应对指标的压力的经验和方法（提升绩效的技巧）
+    - 构建 CI/CD 流水对企业和员工的价值
+
+Tips：
+
+Devops 基本概念，关注内容
+
+* [基于容器和微服务的端到端持续交付流水线](https://cloud.tencent.com/developer/article/1151042) 
+* [CI/CD Pipeline: What, Why & How to Build The Best One](https://www.katalon.com/resources-center/blog/ci-cd-pipeline/)
+* [https://www.plutora.com/blog/understanding-ci-cd-pipeline](https://www.plutora.com/blog/understanding-ci-cd-pipeline)
+
+一些案例研究
+
+* [全开源方案实现基于Docker的CI/CD流水线](https://mp.weixin.qq.com/s?spm=a2c4e.10696291.0.0.4bee19a4bYXtIt&__biz=MzAwODg3MDk0OQ==&mid=2247483930&idx=1&sn=cc11b44b73f3c3f217020c885da6f82d&chksm=9b690f50ac1e8646e6aadc29f1b53803be79de8247970a61dcc1158cadf18f99f53cd48de303&mpshare=1&scene=1&srcid=0702Zq96JjgzFuGuHlrvj1Pz&pass_ticket=hItrI7d9xK0IJNcBaTNopt9pqKL3FJ+iLf+aMs9/EnE=#rd)
+* [Drone CI + GitLab持续集成的基础设施搭建](https://zmcdbp.com/drone-ci-gitlab-base-build/)
+
+
+## 微服务（Orchestration）架构 - 服务代理技术与治理、Serverless服务技术
+
+## 19、高性能 web 应用技术与实践（小组报告）
+
+评价标准：
+
+* 架构设计合理性
+* 关键技术与要点（tricks）
+* 演讲表达能力
+
+
+
+
+
 
 
 
