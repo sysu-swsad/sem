@@ -696,7 +696,7 @@ Devops 基本概念，关注内容
 * [Drone CI + GitLab持续集成的基础设施搭建](https://zmcdbp.com/drone-ci-gitlab-base-build/)
 
 
-## 微服务（Orchestration）架构 - 服务代理技术与治理、Serverless服务技术
+## 微服务（Orchestration）架构 - 服务代理技术与Serverless服务
 
 ## 19、高性能 web 应用技术与实践（小组报告）
 
