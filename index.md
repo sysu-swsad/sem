@@ -597,7 +597,7 @@ ppt 要求：
     - 结合 CNCF 技术栈框架，介绍分布式数据、分布式消息产品
     - 由于内容太多，请根据团队的知识结构与兴趣，选择1-2个方面重点介绍
 
-## 17、微服务（Orchestration）架构 - 监控、日志（审计）与 SLA 管理
+## 17、微服务（Orchestration）架构 - 监控、日志、审计（健康检测）、与 SLA 管理
 
 场景：X 认为从云应用程序结构分解（架构）的角度去审视项目有利于避开各种供应商提供的技术细节。但近来总有供应商提供监控、日志管理产品，X 从内心觉得 Java 多层架构中这些问题都不是问题，决定与 Y 聊聊。
 
@@ -619,7 +619,7 @@ Y: 监控关注实时性能，不需要特别精准，一般使用 UTP 作为传
 
 Y：SLA（Sevice Level Agreement）管理是云服务重要内容，在云上的每个应用都应该提供 系统健康 与 SLA 监控与统计服务供给运维团队。用户使用 Prometheus 与 Elasticsearch 就可以方便的收集各个应用的数据，然后使用 Grafana 在监控大屏上显示出来。
 
-X：难道我们运维团队需要和你们一起设计系统健康与 SLA 统计吗？
+X：难道我们运维团队需要和你们一起设计审计（系统健康检测）与 SLA 统计吗？
 
 Y：是必要的。我们的应用程序是很优好的，只要在应用部署描述中，设置了 Prometheus 服务地址，重要的数据就会按需要发送到监控的。以 Java 应用为例，我们提供了专门的 Filter 类帮助客户监控服务的性能，我们使用的每种语言都有这样的中间件，但使用中间件的缺点就是与应用程序耦合比较紧。如何客户喜欢更灵活的方案，我们建议使用 [代理机制](https://docs.microsoft.com/zh-cn/azure/architecture/patterns/ambassador) 或 [Sidercar 技术](https://docs.microsoft.com/zh-cn/azure/architecture/patterns/sidecar)，灵活的管理性能和流量。流行的说法叫 service mesh 技术。
 
